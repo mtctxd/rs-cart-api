@@ -1,0 +1,25 @@
+service: rs-cart-api
+frameworkVersion: '3'
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    useChildProcesses: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  profile: admin
+
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
