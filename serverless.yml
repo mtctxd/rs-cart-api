@@ -12,6 +12,8 @@ provider:
   name: aws
   runtime: nodejs14.x
   profile: admin
+  region: eu-west-3
+  timeout: 30
 
 functions:
   main:

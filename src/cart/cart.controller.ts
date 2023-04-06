@@ -6,12 +6,13 @@ import { AppRequest, getUserIdFromRequest } from '../shared';
 
 import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
-
+import { Repository } from 'typeorm';
+import { Cart } from 'src/database/entities/cart.entity';
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
     private cartService: CartService,
-    private orderService: OrderService
+    private orderService: OrderService,
   ) { }
 
   // @UseGuards(JwtAuthGuard)
@@ -23,7 +24,7 @@ export class CartController {
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
-      data: { cart, total: calculateCartTotal(cart) },
+      data: { cart, total: calculateCartTotal(cart), tt },
     }
   }
 

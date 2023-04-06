@@ -1,6 +1,6 @@
 ### endpoints:
-  ANY - https://af3t7uspoi.execute-api.us-east-1.amazonaws.com/dev/
-  ANY - https://af3t7uspoi.execute-api.us-east-1.amazonaws.com/dev/{proxy+}
+  ANY - https://98ykf4o9vg.execute-api.eu-west-3.amazonaws.com/dev/
+  ANY - https://98ykf4o9vg.execute-api.eu-west-3.amazonaws.com/dev/{proxy+}
 ### functions:
   main: rs-cart-api-dev-main (20 MB)
 
