@@ -1,3 +1,9 @@
+### endpoints:
+  ANY - https://98ykf4o9vg.execute-api.eu-west-3.amazonaws.com/dev/
+  ANY - https://98ykf4o9vg.execute-api.eu-west-3.amazonaws.com/dev/{proxy+}
+### functions:
+  main: rs-cart-api-dev-main (20 MB)
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
