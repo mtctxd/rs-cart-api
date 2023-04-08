@@ -1,6 +1,7 @@
 import {
-  Entity,
   Column,
+  Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -11,15 +12,10 @@ export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   product_id: string;
 
-  @Column({
-    type: 'integer',
-    nullable: false,
-  })
+  @Column({ type: 'int', nullable: false })
   count: number;
 
-  @ManyToOne(
-    () => Cart,
-    cart => cart.cart_items,
-  )
-  cart: Cart;
+  @ManyToOne(() => Cart)
+  @JoinColumn({ name: 'cart_id', referencedColumnName: 'id' })
+  cart_id: Cart;
 }

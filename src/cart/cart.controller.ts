@@ -18,25 +18,30 @@ import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cart } from 'src/database/entities/cart.entity';
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
+    @InjectRepository(Cart) 
+    private t: Repository<Cart>,
   ) {}
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Get()
-  findUserCart(@Req() req: AppRequest) {
+  async findUserCart(@Req() req: AppRequest) {
     const cart = this.cartService.findOrCreateByUserId(
       getUserIdFromRequest(req),
     );
 
+    const r = await this.t.find();
+
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
-      data: { cart, total: calculateCartTotal(cart) },
+      data: { cart, total: calculateCartTotal(cart), r },
     };
   }
 

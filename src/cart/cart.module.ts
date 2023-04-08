@@ -6,9 +6,10 @@ import { CartController } from './cart.controller';
 import { CartService } from './services';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from 'src/database/database.module';
+import { Cart } from 'src/database/entities/cart.entity';
 
 @Module({
-  imports: [forwardRef(() => DatabaseModule), OrderModule],
+  imports: [TypeOrmModule.forFeature([Cart]), OrderModule],
   providers: [CartService],
   controllers: [CartController],
 })

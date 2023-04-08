@@ -1,36 +1,30 @@
 import {
+  Column,
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { CartItem } from './cart-item.entity';
-
-export enum CartItemStatus {
-  OPEN = 'OPEN',
-  ORDERED = 'ORDERED',
-}
 
 @Entity()
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    type: 'date',
-    nullable: false,
-  })
-  created_at: Date;
+  @Column({ type: 'uuid', nullable: false })
+  user_id: string;
 
-  @Column({
-    type: 'date',
-    nullable: false,
-  })
-  updated_at: Date;
+  @Column({ type: 'date', nullable: false })
+  created_at: string;
 
-  @OneToMany(
-    () => CartItem,
-    item => item.cart,
-  )
-  cart_items: CartItem[];
+  @Column({ type: 'date', nullable: false })
+  updated_at: string;
+
+  @Column({ type: 'enum', enum: ['OPEN', 'ORDERED'], nullable: false })
+  status: 'OPEN' | 'ORDERED';
+
+  @OneToMany(() => CartItem, (cart_item) => cart_item.cart_id)
+  @JoinColumn({ name: 'id', referencedColumnName: 'cart_id' })
+  items: CartItem[];
 }
