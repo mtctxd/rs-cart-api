@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Cart } from './cart.entity';
 
-@Entity()
+@Entity({ name: 'cart_items' })
 export class CartItem {
   @PrimaryGeneratedColumn('uuid')
   product_id: string;

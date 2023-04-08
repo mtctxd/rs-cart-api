@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
 import { CartItem } from './entities/cart-item.entity';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CartItem } from './entities/cart-item.entity';
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/../**/*.entity.js'],
         logging: true,
+        namingStrategy: new SnakeNamingStrategy(),
       }),
     }),
     TypeOrmModule.forFeature([Cart, CartItem]),

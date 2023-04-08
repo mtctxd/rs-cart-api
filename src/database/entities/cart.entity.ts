@@ -7,13 +7,10 @@ import {
 } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 
-@Entity()
+@Entity({ name: 'carts' })
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ type: 'uuid', nullable: false })
-  user_id: string;
 
   @Column({ type: 'date', nullable: false })
   created_at: string;

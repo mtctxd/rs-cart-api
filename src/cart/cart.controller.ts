@@ -24,7 +24,7 @@ export class CartController {
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
-    @InjectRepository(Cart) 
+    @InjectRepository(Cart)
     private t: Repository<Cart>,
   ) {}
 
@@ -36,7 +36,11 @@ export class CartController {
       getUserIdFromRequest(req),
     );
 
-    const r = await this.t.find();
+    const r = await this.t.find({
+      relations: {
+        items: true,
+      },
+    });
 
     return {
       statusCode: HttpStatus.OK,
