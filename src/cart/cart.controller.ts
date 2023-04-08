@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 
 // import { BasicAuthGuard, JwtAuthGuard } from '../auth';
@@ -16,48 +17,32 @@ import { AppRequest, getUserIdFromRequest } from '../shared';
 
 import { calculateCartTotal } from './models-rules';
 import { CartService } from './services';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Cart } from 'src/database/entities/cart.entity';
+
 @Controller('api/profile/cart')
 export class CartController {
   constructor(
     private cartService: CartService,
     private orderService: OrderService,
-    @InjectRepository(Cart)
-    private t: Repository<Cart>,
   ) {}
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Get()
-  async findUserCart(@Req() req: AppRequest) {
-    const cart = this.cartService.findOrCreateByUserId(
-      getUserIdFromRequest(req),
-    );
-
-    const r = await this.t.find({
-      relations: {
-        items: true,
-      },
-    });
-
+  async findUserCart(@Query('user_id') userId: string) {
+    const cart = await this.cartService.findOrCreateByUserId(userId);
     return {
       statusCode: HttpStatus.OK,
       message: 'OK',
-      data: { cart, total: calculateCartTotal(cart), r },
+      data: { cart, total: calculateCartTotal(cart) },
     };
   }
 
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Put()
-  updateUserCart(@Req() req: AppRequest, @Body() body) {
+  async updateUserCart(@Query('user_id') userId: string, @Body() body) {
     // TODO: validate body payload...
-    const cart = this.cartService.updateByUserId(
-      getUserIdFromRequest(req),
-      body,
-    );
+    const cart = await this.cartService.updateByUserId(userId, body);
 
     return {
       statusCode: HttpStatus.OK,
@@ -72,8 +57,8 @@ export class CartController {
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Delete()
-  clearUserCart(@Req() req: AppRequest) {
-    this.cartService.removeByUserId(getUserIdFromRequest(req));
+  async clearUserCart(@Query('user_id') userId: string) {
+    await this.cartService.removeByUserId(userId);
 
     return {
       statusCode: HttpStatus.OK,
@@ -84,9 +69,8 @@ export class CartController {
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Post('checkout')
-  checkout(@Req() req: AppRequest, @Body() body) {
-    const userId = getUserIdFromRequest(req);
-    const cart = this.cartService.findByUserId(userId);
+  async checkout(@Req() req, @Query('user_id') userId: string, @Body() body) {
+    const cart = await this.cartService.findByUserId(userId);
 
     if (!(cart && cart.items.length)) {
       const statusCode = HttpStatus.BAD_REQUEST;

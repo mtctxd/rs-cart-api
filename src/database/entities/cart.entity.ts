@@ -7,19 +7,31 @@ import {
 } from 'typeorm';
 import { CartItem } from './cart-item.entity';
 
+export enum CartStatus {
+  OPEN = 'OPEN',
+  ORDERED = 'ORDERED',
+}
+
 @Entity({ name: 'carts' })
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id?: string;
 
   @Column({ type: 'date', nullable: false })
-  created_at: string;
+  user_id: string;
 
-  @Column({ type: 'date', nullable: false })
-  updated_at: string;
+  @Column({ type: 'timestamp' })
+  created_at?: number;
 
-  @Column({ type: 'enum', enum: ['OPEN', 'ORDERED'], nullable: false })
-  status: 'OPEN' | 'ORDERED';
+  @Column({ type: 'timestamp', nullable: false })
+  updated_at: number;
+
+  @Column({
+    type: 'enum',
+    enum: [CartStatus.OPEN, CartStatus.ORDERED],
+    nullable: false,
+  })
+  status: CartStatus;
 
   @OneToMany(() => CartItem, (cart_item) => cart_item.cart_id)
   @JoinColumn({ name: 'id', referencedColumnName: 'cart_id' })
